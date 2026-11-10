@@ -48,6 +48,9 @@ function PortfolioPage() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [formMessage, setFormMessage] = useState("");
+  const [loaderValue, setLoaderValue] = useState(0);
+  const [showLoader, setShowLoader] = useState(true);
+  const [pageReady, setPageReady] = useState(false);
   const submitMessage = useServerFn(submitContactMessage);
   const contactForm = useRef<HTMLFormElement>(null);
 
@@ -66,6 +69,23 @@ function PortfolioPage() {
       scrollInstance = new LocomotiveScroll({ lenisOptions: { smoothWheel: true, lerp: 0.085 } });
       const lenis = (scrollInstance as unknown as { lenisInstance?: { on: (event: string, callback: () => void) => void } }).lenisInstance;
       lenis?.on("scroll", () => ScrollTrigger.update());
+      if (!motionAllowed) {
+        setLoaderValue(100);
+        setShowLoader(false);
+        setPageReady(true);
+      } else {
+        const loadingProgress = { value: 0 };
+        gsap.to(loadingProgress, {
+          value: 100,
+          duration: 1.7,
+          ease: "power2.inOut",
+          onUpdate: () => setLoaderValue(Math.round(loadingProgress.value)),
+          onComplete: () => {
+            gsap.to(".preloader-inner", { autoAlpha: 0, y: -10, duration: 0.3, ease: "power2.in" });
+            gsap.to(".preloader", { autoAlpha: 0, scale: 0.98, duration: 0.55, delay: 0.18, ease: "power2.inOut", onComplete: () => { setShowLoader(false); setPageReady(true); } });
+          },
+        });
+      }
       context = gsap.context(() => {
         if (!motionAllowed) {
           gsap.set("[data-reveal], .hero-copy, .portrait-wrap", { autoAlpha: 1, y: 0, filter: "blur(0px)" });
@@ -82,6 +102,9 @@ function PortfolioPage() {
       });
       requestAnimationFrame(() => ScrollTrigger.refresh());
     }).catch(() => {
+      setLoaderValue(100);
+      setShowLoader(false);
+      setPageReady(true);
       document.querySelectorAll<HTMLElement>("[data-reveal], .hero-copy, .portrait-wrap").forEach((element) => {
         element.style.opacity = "1";
         element.style.visibility = "visible";
@@ -115,7 +138,8 @@ function PortfolioPage() {
   };
 
   return (
-    <main className="portfolio-shell">
+    <main className={`portfolio-shell${pageReady ? " portfolio-ready" : ""}`}>
+      {showLoader && <div className="preloader" role="status" aria-label="Loading portfolio"><div className="preloader-inner"><div className="preloader-wordmark">L<span>.</span></div><p>LOADING PORTFOLIO</p><div className="loading-track"><span style={{ width: `${loaderValue}%` }} /></div><span className="loading-number">{String(loaderValue).padStart(2, "0")}<small> / 100</small></span></div></div>}
       <div className="ambient-grid" aria-hidden="true" />
       <div className="site-frame">
         <header className="site-header">
@@ -130,13 +154,14 @@ function PortfolioPage() {
         {menuOpen && <nav className="mobile-nav" aria-label="Mobile navigation">{navItems.map((item) => <a key={item.href} href={item.href} onClick={() => setMenuOpen(false)}>{item.label}<ArrowUpRight aria-hidden="true" /></a>)}</nav>}
 
         <section className="hero-section" id="home">
+          <div className="spline-scene" aria-hidden="true"><iframe title="Interactive 3D scene" src="https://my.spline.design/projectpromoclickzoom-NSsEBo4Sc39i7uPu0gPqsAA3/" loading="lazy" tabIndex={-1} /></div>
           <div className="hero-copy">
-            <div className="availability"><span className="status-light" /> Open to meaningful work</div>
+            <div className="availability"><span className="status-light" /> LOKESH ADDEPALLI / PORTFOLIO</div>
             <p className="eyebrow hero-eyebrow">AI / ML ENGINEER <span>·</span> DEVELOPER</p>
             <h1>Building what<br />comes <span className="gradient-text">next.</span></h1>
             <p className="hero-description">Hi, I’m Lokesh Addepalli. I turn ambitious ideas into intelligent systems and digital experiences that feel unmistakably human.</p>
             <div className="hero-actions"><Button asChild className="primary-cta"><a href="#contact">Hire me <ArrowUpRight aria-hidden="true" /></a></Button><a href="#projects" className="text-action">Explore my work <ArrowDown aria-hidden="true" /></a></div>
-            <div className="hero-meta"><span>BASED IN INDIA</span><span className="meta-divider" /><span>AVAILABLE WORLDWIDE</span></div>
+            <div className="hero-meta"><span>INTELLIGENCE</span><span className="meta-divider" /><span>ENGINEERING</span><span className="meta-divider" /><span>IMAGINATION</span></div>
           </div>
           <div className="portrait-wrap" aria-label="Portrait of Lokesh">
             <div className="portrait-ring" />
