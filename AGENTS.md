@@ -28,3 +28,8 @@ use the editor.
   own key and store it in Secrets.
 - **Secrets.** Lovable manages them. Do not put secret values in the repo.
 <!-- LOVABLE:END -->
+
+## Application architecture
+- Keep the public portfolio experience in TanStack Start route files; use small client-safe modules for reusable view logic and `.functions.ts` modules for RPC-backed form writes, because SSR and browser bundles share route imports.
+- Persist public contact requests through a validated server function into a locked, RLS-enabled Lovable Cloud table; the elevated client is imported only inside the server handler to keep credentials out of browser bundles.
+- Use GSAP ScrollTrigger and Locomotive Scroll only after client hydration, with teardown and reduced-motion support, because browser animation and smooth scrolling must not run during SSR.
