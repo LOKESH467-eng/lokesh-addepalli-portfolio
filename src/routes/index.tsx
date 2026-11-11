@@ -66,7 +66,7 @@ function PortfolioPage() {
       const ScrollTrigger = triggerModule.ScrollTrigger;
       gsap.registerPlugin(ScrollTrigger);
       const LocomotiveScroll = scrollModule.default;
-      scrollInstance = new LocomotiveScroll({ lenisOptions: { smoothWheel: true, lerp: 0.085 } });
+      scrollInstance = new LocomotiveScroll({ lenisOptions: { smoothWheel: motionAllowed, lerp: 0.085 } });
       const lenis = (scrollInstance as unknown as { lenisInstance?: { on: (event: string, callback: () => void) => void } }).lenisInstance;
       lenis?.on("scroll", () => ScrollTrigger.update());
       if (!motionAllowed) {
