@@ -31,5 +31,5 @@ use the editor.
 
 ## Application architecture
 - Keep the public portfolio experience in TanStack Start route files; use small client-safe modules for reusable view logic and `.functions.ts` modules for RPC-backed form writes, because SSR and browser bundles share route imports.
-- Persist public contact requests through a validated server function into a locked, RLS-enabled Lovable Cloud table; the elevated client is imported only inside the server handler to keep credentials out of browser bundles.
+- Forward public contact requests through a validated server function to the deployed FastAPI endpoint, keeping external requests off the browser and secrets out of frontend code.
 - Use GSAP ScrollTrigger and Locomotive Scroll only after client hydration, with teardown and reduced-motion support, because browser animation and smooth scrolling must not run during SSR.

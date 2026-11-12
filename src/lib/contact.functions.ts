@@ -10,11 +10,21 @@ const contactSubmissionSchema = z.object({
 export const submitContactMessage = createServerFn({ method: "POST" })
   .inputValidator(contactSubmissionSchema)
   .handler(async ({ data }) => {
-    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
-    const { error } = await supabaseAdmin.from("contact_submissions").insert(data);
+    try {
+      const response = await fetch("https://portfolio-contact-form-seven.vercel.app/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: data.name,
+          email: data.email,
+          message: data.message,
+        }),
+      });
 
-    if (error) {
-      console.error("Unable to save contact submission", error.message);
+      if (!response.ok) {
+        throw new Error("Contact API returned an unsuccessful response");
+      }
+    } catch {
       throw new Error("Your message could not be sent. Please try again.");
     }
 
