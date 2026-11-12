@@ -123,13 +123,18 @@ function PortfolioPage() {
     setSubmitting(true);
     setFormMessage("");
     const form = new FormData(event.currentTarget);
-    const name = String(form.get("name") ?? "");
-    const email = String(form.get("email") ?? "");
-    const message = String(form.get("message") ?? "");
+    const name = String(form.get("name") ?? "").trim();
+    const email = String(form.get("email") ?? "").trim();
+    const message = String(form.get("message") ?? "").trim();
+    if (!name || !email || !message) {
+      setFormMessage("Please complete all fields.");
+      setSubmitting(false);
+      return;
+    }
     try {
       await submitMessage({ data: { name, email, message } });
       contactForm.current?.reset();
-      setFormMessage("Thanks — your message is saved.");
+      setFormMessage("Thanks — your message has been sent.");
     } catch {
       setFormMessage("Your message could not be sent. Please try again.");
     } finally {
