@@ -6,22 +6,8 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import profileAsset from "@/assets/lokesh-profile.png.asset.json";
-import project1 from "@/assets/project-1.png.asset.json";
-import project2 from "@/assets/project-2.png.asset.json";
-import project3 from "@/assets/project-3.png.asset.json";
-import project4 from "@/assets/project-4.png.asset.json";
-import project5 from "@/assets/project-5.png.asset.json";
-import project6 from "@/assets/project-6.png.asset.json";
 import { submitContactMessage } from "@/lib/contact.functions";
-
-const projects = [
-  { number: "01", title: "Interactive web experiences", type: "Creative development", image: project1.url, imageAlt: "Interactive web project featuring a 3D web interface", tags: ["React", "Three.js", "WebGL"] },
-  { number: "02", title: "Next-level gaming UI", type: "Product design & engineering", image: project2.url, imageAlt: "Gaming interface and character selection experience", tags: ["React", "UI engineering", "3D"] },
-  { number: "03", title: "A portfolio in motion", type: "Creative direction", image: project3.url, imageAlt: "A vibrant creative developer portfolio website", tags: ["Web design", "Animation", "Frontend"] },
-  { number: "04", title: "Worlds built for play", type: "Gaming web design", image: project4.url, imageAlt: "Colorful illustrated gaming website concept", tags: ["Design systems", "React", "Motion"] },
-  { number: "05", title: "Building fast, reliably", type: "Motion & interaction", image: project5.url, imageAlt: "A vivid purple motion-focused web portfolio", tags: ["GSAP", "ScrollTrigger", "WebGL"] },
-  { number: "06", title: "A portfolio, step by step", type: "Learning experience", image: project6.url, imageAlt: "Dark portfolio website with a 3D character portrait", tags: ["HTML", "CSS", "JavaScript"] },
-];
+import { projects } from "@/lib/projects";
 
 const skills = ["Python", "Machine Learning", "Deep Learning", "Java", "HTML & CSS", "Generative AI"];
 const navItems = [
@@ -195,7 +181,7 @@ function PortfolioPage() {
         <section className="projects-section section-space" id="projects">
           <div className="section-heading" data-reveal><p className="eyebrow">SELECTED PROJECTS</p><span className="section-number">02 / 03</span></div>
           <div className="projects-intro" data-reveal><div><h2>Ideas, <span className="gradient-text">in motion.</span></h2><p>A selection of experiments, interfaces, and ideas brought to life.</p></div><a className="project-count" href="#contact"><span>HAVE A PROJECT?</span><ArrowUpRight aria-hidden="true" /></a></div>
-          <div className="project-grid">{projects.map((project) => <article className="project-card" key={project.number}><div className="project-visual"><img src={project.image} alt={project.imageAlt} loading="lazy" /><span className="project-no">/{project.number}</span><span className="project-open" aria-hidden="true"><ArrowUpRight /></span></div><div className="project-info"><div><p className="project-type">{project.type}</p><h3>{project.title}</h3></div><div className="project-tags">{project.tags.map((tag) => <span key={tag}>{tag}</span>)}</div></div></article>)}</div>
+          <div className="project-grid">{projects.map((project) => <article className="project-card" key={project.number}><div className="project-visual">{project.isPlaceholder ? <span className="project-placeholder">Coming Soon</span> : <img src={project.image} alt={project.imageAlt} loading="lazy" />}<span className="project-no">/{project.number}</span>{!project.isPlaceholder && <span className="project-open" aria-hidden="true"><ArrowUpRight /></span>}</div>{!project.isPlaceholder && <div className="project-info"><div><p className="project-type">{project.type}</p><h3>{project.title}</h3>{project.description && <p className="project-description">{project.description}</p>}</div>{project.tags && project.tags.length > 0 && <div className="project-tags">{project.tags.map((tag) => <span key={tag}>{tag}</span>)}</div>}</div>}</article>)}</div>
           <div className="projects-note" data-reveal><span>BUILT WITH CURIOSITY <Sparkles aria-hidden="true" /></span><p>Every project starts with a question worth exploring.</p><a href="#contact">Have one in mind? <ArrowRight aria-hidden="true" /></a></div>
         </section>
 
