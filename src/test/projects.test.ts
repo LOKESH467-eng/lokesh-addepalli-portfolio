@@ -13,6 +13,8 @@ describe("portfolio project slots", () => {
       "CampusConnect",
     ]);
     expect(projects.slice(0, 2).every((project) => !project.tags)).toBe(true);
+    expect(projects[0]?.description).toContain("not a definitive diagnosis");
+    expect(projects[1]?.description).toContain("students, faculty, and administrators");
   });
 
   it("keeps the remaining four slots as empty placeholders", () => {
