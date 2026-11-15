@@ -30,3 +30,20 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+
+# Vercel
+.vercel/
+
+# Private environment files
+.env.local
+.env.*.local
+
+# Backend secrets
+backend/.env
+backend/.env.*
